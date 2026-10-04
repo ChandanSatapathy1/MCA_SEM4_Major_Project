@@ -64,6 +64,7 @@ else:
     precision_data = pd.DataFrame({"Precision": [0.5603, 0.5763, 0.5506]}, index=models)
     recall_data = pd.DataFrame({"Recall": [0.6337, 0.5856, 0.5668]}, index=models)
     f1_data = pd.DataFrame({"F1 Score": [0.5947, 0.5809, 0.5586]}, index=models)
+    auc_data = pd.DataFrame({"AUC Score": [0.8214, 0.8104, 0.8032]}, index=models)
 
     chart_col1, chart_col2 = st.columns(2)
 
@@ -73,6 +74,9 @@ else:
 
         st.write("Recall")
         st.bar_chart(recall_data)
+
+        st.write("AUC Score")
+        st.bar_chart(auc_data)
 
     with chart_col2:
         st.write("Precision")
@@ -102,6 +106,13 @@ else:
     importance_df = importance_df.set_index("Feature")
 
     st.bar_chart(importance_df)
+
+    st.write("---")
+    st.subheader("Which Model Performs Best")
+
+    st.write("Random Forest has the highest accuracy and precision.")
+    st.write("Logistic Regression has the highest recall, F1 score, and AUC score.")
+    st.write("Since missing an actual churner is more costly than a false alarm, Logistic Regression is considered the better model for this business problem, even though it does not have the highest accuracy.")
 
     st.write("---")
 st.subheader("Model Validation Notes")
