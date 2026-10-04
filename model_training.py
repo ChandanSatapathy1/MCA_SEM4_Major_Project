@@ -5,7 +5,7 @@ from imblearn.over_sampling import SMOTE
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report , roc_auc_score
 import joblib
 
 # loading dataset
@@ -51,6 +51,8 @@ print("Precision:", precision_score(y_test, log_pred))
 print("Recall:", recall_score(y_test, log_pred))
 print("F1 Score:", f1_score(y_test, log_pred))
 print(confusion_matrix(y_test, log_pred))
+log_proba = log_model.predict_proba(X_test_scaled)[:, 1]
+print("AUC Score:", roc_auc_score(y_test, log_proba))
 
 # training random forest
 rf_model = RandomForestClassifier(random_state=42)
@@ -63,6 +65,8 @@ print("Precision:", precision_score(y_test, rf_pred))
 print("Recall:", recall_score(y_test, rf_pred))
 print("F1 Score:", f1_score(y_test, rf_pred))
 print(confusion_matrix(y_test, rf_pred))
+rf_proba = rf_model.predict_proba(X_test)[:, 1]
+print("AUC Score:", roc_auc_score(y_test, rf_proba))
 
 # doing cross validation properly - smote should happen inside each fold, not before
 from sklearn.model_selection import cross_val_score
@@ -105,10 +109,12 @@ print("Precision:", precision_score(y_test, best_rf_pred))
 print("Recall:", recall_score(y_test, best_rf_pred))
 print("F1 Score:", f1_score(y_test, best_rf_pred))
 print(confusion_matrix(y_test, best_rf_pred))
+best_rf_proba = best_rf_model.predict_proba(X_test)[:, 1]
+print("AUC Score:", roc_auc_score(y_test, best_rf_proba))
 
 
 
-# training xgboost
+# training git statusxgboost
 xgb_model = XGBClassifier(random_state=42)
 xgb_model.fit(X_train_smote, y_train_smote)
 xgb_pred = xgb_model.predict(X_test)
@@ -119,6 +125,8 @@ print("Precision:", precision_score(y_test, xgb_pred))
 print("Recall:", recall_score(y_test, xgb_pred))
 print("F1 Score:", f1_score(y_test, xgb_pred))
 print(confusion_matrix(y_test, xgb_pred))
+xgb_proba = xgb_model.predict_proba(X_test)[:, 1]
+print("AUC Score:", roc_auc_score(y_test, xgb_proba))
 
 # saving models
 joblib.dump(log_model, 'log_model.pkl')
