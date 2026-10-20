@@ -60,11 +60,11 @@ else:
     # these accuracy numbers are from model_training.py output
     models = ["Logistic Regression", "Random Forest", "XGBoost"]
 
-    accuracy_data = pd.DataFrame({"Accuracy": [0.7704, 0.7754, 0.7619]}, index=models)
-    precision_data = pd.DataFrame({"Precision": [0.5603, 0.5763, 0.5506]}, index=models)
-    recall_data = pd.DataFrame({"Recall": [0.6337, 0.5856, 0.5668]}, index=models)
-    f1_data = pd.DataFrame({"F1 Score": [0.5947, 0.5809, 0.5586]}, index=models)
-    auc_data = pd.DataFrame({"AUC Score": [0.8214, 0.8104, 0.8032]}, index=models)
+    accuracy_data = pd.DataFrame({"Accuracy": [0.7448, 0.7754, 0.7619]}, index=models)
+    precision_data = pd.DataFrame({"Precision": [0.5145, 0.5763, 0.5506]}, index=models)
+    recall_data = pd.DataFrame({"Recall": [0.7112, 0.5856, 0.5668]}, index=models)
+    f1_data = pd.DataFrame({"F1 Score": [0.5971, 0.5809, 0.5586]}, index=models)
+    auc_data = pd.DataFrame({"AUC Score": [0.8226, 0.8104, 0.8032]}, index=models)
 
     chart_col1, chart_col2 = st.columns(2)
 

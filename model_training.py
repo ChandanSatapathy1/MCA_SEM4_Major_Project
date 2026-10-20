@@ -7,6 +7,8 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, classification_report , roc_auc_score
 import joblib
+from sklearn.model_selection import GridSearchCV
+from imblearn.pipeline import Pipeline
 
 # loading dataset
 df = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
@@ -40,8 +42,29 @@ scaler = StandardScaler()
 X_train_smote_scaled = scaler.fit_transform(X_train_smote)
 X_test_scaled = scaler.transform(X_test)
 
+# checking which C value works best for logistic regression
+log_pipe = Pipeline([
+    ('smote', SMOTE(random_state=42)),
+    ('scaler', StandardScaler()),
+    ('model', LogisticRegression(max_iter=1000))
+])
+
+log_params = {'model__C': [1, 0.1, 0.01, 0.001]}
+log_grid = GridSearchCV(log_pipe, log_params, cv=5, scoring='f1')
+log_grid.fit(X_train, y_train)
+
+cv_results = pd.DataFrame(log_grid.cv_results_)
+print(cv_results[['param_model__C', 'mean_test_score', 'std_test_score']])
+
+# C=1 scored highest in cross validation, but C=0.001 is within one standard error
+# and gives more stable coefficients, so using the simpler model
+
+best_c = 0.001
+
+print("Best C for logistic regression:", best_c)
+
 # training logistic regression
-log_model = LogisticRegression(max_iter=1000)
+log_model = LogisticRegression(max_iter=1000, C=best_c)
 log_model.fit(X_train_smote_scaled, y_train_smote)
 log_pred = log_model.predict(X_test_scaled)
 

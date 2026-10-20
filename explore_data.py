@@ -71,6 +71,9 @@ df['Churn'] = df['Churn'].map({'Yes': 1, 'No': 0})
 # converting all other text columns to numbers using one-hot encoding
 df = pd.get_dummies(df, drop_first=True)
 
+mask = (df['tenure'] <= 6) & (df['Contract_One year'] == 0) & (df['Contract_Two year'] == 0) & (df['InternetService_Fiber optic'] == 1) & (df['PaymentMethod_Electronic check'] == 1)
+print(mask.sum(), df.loc[mask, 'Churn'].mean())
+
 print(df.head())
 print(df.shape)
 
@@ -152,15 +155,5 @@ print("Recall:", recall_score(y_test, xgb_pred))
 print("F1 Score:", f1_score(y_test, xgb_pred))
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, xgb_pred))
-
-import joblib
-
-# saving all 3 models
-joblib.dump(log_model, 'log_model.pkl')
-joblib.dump(rf_model, 'rf_model.pkl')
-joblib.dump(xgb_model, 'xgb_model.pkl')
-
-# saving the scaler too (needed for logistic regression predictions later)
-joblib.dump(scaler, 'scaler.pkl')
 
 print("all models saved")
